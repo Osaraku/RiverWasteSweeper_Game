@@ -7,6 +7,7 @@ public class Player : MonoBehaviour
 
 
     private bool isWalking;
+    private Vector3 lastInteractDir;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -18,12 +19,46 @@ public class Player : MonoBehaviour
     void Update()
     {
         HandleMovement();
+        // HandleInteractions();
     }
 
     public bool IsWalking()
     {
         return isWalking;
     }
+
+    // private void HandleInteractions()
+    // {
+    //     Vector2 inputVector = gameInput.GetMovementVectorNormalized();
+
+    //     Vector3 moveDir = new Vector3(inputVector.x, 0f, inputVector.y);
+
+    //     if (moveDir != Vector3.zero)
+    //     {
+    //         lastInteractDir = moveDir;
+    //     }
+    //     float interactDistance = 2f;
+    //     if (Physics.Raycast(transform.position, lastInteractDir, out RaycastHit raycastHit, interactDistance, countersLayerMask))
+    //     {
+    //         if (raycastHit.transform.TryGetComponent(out BaseCounter counter))
+    //         {
+    //             // Has BaseCounter
+    //             if (counter != selectedCounter)
+    //             {
+    //                 SetSelectedCounter(counter);
+
+    //             }
+    //         }
+    //         else
+    //         {
+    //             SetSelectedCounter(null);
+    //         }
+    //     }
+    //     else
+    //     {
+    //         SetSelectedCounter(null);
+    //     }
+    // }
 
     private void HandleMovement()
     {
@@ -75,7 +110,9 @@ public class Player : MonoBehaviour
         }
 
         isWalking = moveDir != Vector3.zero;
-        float rotateSpeed = 10f;
+        float rotateSpeed = 5f;
         transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * rotateSpeed);
+        // Quaternion toRotation = Quaternion.LookRotation(moveDir, Vector3.up);
+        // transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotateSpeed * Time.deltaTime);
     }
 }
