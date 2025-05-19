@@ -1,22 +1,32 @@
+using System;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed = 7f;
+    public static Player Instance { get; private set; }
+
+    [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private GameInput gameInput;
+    [SerializeField] private int maxTrashValue = 15;
 
 
     private bool isWalking;
+    private int currentTrashValue = 0;
     private Vector3 lastInteractDir;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void Awake()
+    {
+        Instance = this;
+    }
+
+    private void Start()
     {
 
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         HandleMovement();
         // HandleInteractions();
@@ -67,7 +77,7 @@ public class Player : MonoBehaviour
         Vector3 moveDir = new Vector3(inputVector.x, 0f, inputVector.y);
 
         float moveDistance = moveSpeed * Time.deltaTime;
-        float playerRadius = .7f;
+        float playerRadius = 1f;
         float playerHeight = 2f;
         bool canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDir, moveDistance);
 
@@ -112,7 +122,31 @@ public class Player : MonoBehaviour
         isWalking = moveDir != Vector3.zero;
         float rotateSpeed = 5f;
         transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * rotateSpeed);
-        // Quaternion toRotation = Quaternion.LookRotation(moveDir, Vector3.up);
-        // transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotateSpeed * Time.deltaTime);
     }
+
+    private void GameInput_OnInteractAction(object sender, EventArgs e)
+    {
+        // if (selectedCounter != null)
+        // {
+        //     selectedCounter.Interact(this);
+        // }
+    }
+
+    public int GetCurrentTrashValue()
+    {
+        return currentTrashValue;
+    }
+
+    public int GetMaxTrashValue()
+    {
+        return maxTrashValue;
+    }
+
+    public void IncreaseTrashValue(int trashValue)
+    {
+        currentTrashValue += trashValue;
+        Debug.Log(currentTrashValue);
+    }
+
+
 }
