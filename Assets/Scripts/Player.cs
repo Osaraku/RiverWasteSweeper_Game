@@ -15,6 +15,7 @@ public class Player : MonoBehaviour
 
     private bool isWalking;
     private int currentTrashValue = 0;
+    private int totalTrashValue;
     private int currentBoatLevel = 1;
     private int goldAmount = 0;
 
@@ -187,6 +188,11 @@ public class Player : MonoBehaviour
         currentTrashValue = value;
     }
 
+    public int GetTotalTrashValue()
+    {
+        return totalTrashValue;
+    }
+
     public int GetMaxTrashValue()
     {
         return maxTrashValue;
@@ -213,6 +219,7 @@ public class Player : MonoBehaviour
     public void IncreaseTrashValue(int value)
     {
         currentTrashValue += value;
+        totalTrashValue += value;
         Debug.Log("Trash value:" + currentTrashValue);
     }
 
