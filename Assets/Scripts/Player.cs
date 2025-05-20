@@ -15,8 +15,8 @@ public class Player : MonoBehaviour
 
     private bool isWalking;
     private int currentTrashValue = 0;
+    private int currentBoatLevel = 1;
     private int goldAmount = 0;
-    private Vector3 lastInteractDir;
 
     private void Awake()
     {
@@ -53,6 +53,11 @@ public class Player : MonoBehaviour
                 if (collider.TryGetComponent(out GarbageTruck garbageTruck))
                 {
                     garbageTruck.Interact();
+                }
+
+                if (collider.TryGetComponent(out BuyableBoat buyableBoat))
+                {
+                    buyableBoat.Interact();
                 }
             }
         }
@@ -187,6 +192,17 @@ public class Player : MonoBehaviour
         return maxTrashValue;
     }
 
+    public int GetGoldAmount()
+    {
+        return goldAmount;
+    }
+
+    public void SetGoldAmount(int value)
+    {
+        goldAmount = value;
+        Debug.Log("Gold amount:" + goldAmount);
+    }
+
     public void IncreaseGoldAmount(int value)
     {
         goldAmount += value;
@@ -198,6 +214,14 @@ public class Player : MonoBehaviour
     {
         currentTrashValue += value;
         Debug.Log("Trash value:" + currentTrashValue);
+    }
+
+    public void BoatUpgrade(int toLevel, int speedIncrease, int trashStorageIncrease)
+    {
+        transform.GetChild(currentBoatLevel - 1).gameObject.SetActive(false);
+        transform.GetChild(toLevel - 1).gameObject.SetActive(true);
+        moveSpeed += speedIncrease;
+        maxTrashValue += trashStorageIncrease;
     }
 
 

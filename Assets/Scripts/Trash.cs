@@ -19,8 +19,6 @@ public class Trash : MonoBehaviour
             Player.Instance.IncreaseTrashValue(trashValue);
             Destroy(gameObject);
         }
-
-
     }
 
     void OnTriggerExit(Collider other)
