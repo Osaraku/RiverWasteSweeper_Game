@@ -13,7 +13,7 @@ public class Player : MonoBehaviour
     private InputSystem_Actions playerInputAction;
     private InputAction interactAction;
 
-    private bool isWalking;
+    private bool forcedStop = false;
     private int currentTrashValue = 0;
     private int totalTrashValue;
     private int currentBoatLevel = 1;
@@ -36,11 +36,6 @@ public class Player : MonoBehaviour
     {
         HandleMovement();
         HandleInteractions();
-    }
-
-    public bool IsWalking()
-    {
-        return isWalking;
     }
 
     private void HandleInteractions()
@@ -168,14 +163,21 @@ public class Player : MonoBehaviour
             }
         }
 
-        if (canMove)
+        if (canMove && !forcedStop)
         {
             transform.position += moveDir * moveDistance;
         }
 
-        isWalking = moveDir != Vector3.zero;
-        float rotateSpeed = 2f;
-        transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * rotateSpeed);
+        if (!forcedStop)
+        {
+            float rotateSpeed = 2f;
+            transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * rotateSpeed);
+        }
+    }
+
+    public void SetForcedStop(bool value)
+    {
+        forcedStop = value;
     }
 
     public int GetCurrentTrashValue()

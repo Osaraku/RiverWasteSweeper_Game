@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Experimental.Rendering;
@@ -76,13 +77,14 @@ namespace WaterSystem
             Init();
             RenderPipelineManager.beginCameraRendering += BeginCameraRendering;
 
-            if(resources == null)
+            if (resources == null)
             {
                 resources = Resources.Load("WaterResources") as WaterResources;
             }
         }
 
-        private void OnDisable() {
+        private void OnDisable()
+        {
             Cleanup();
         }
 
@@ -123,8 +125,8 @@ namespace WaterSystem
 
             var newPos = cam.transform.TransformPoint(Vector3.forward * forwards);
             newPos.y = yOffset;
-            newPos.x = quantizeValue * (int) (newPos.x / quantizeValue);
-            newPos.z = quantizeValue * (int) (newPos.z / quantizeValue);
+            newPos.x = quantizeValue * (int)(newPos.x / quantizeValue);
+            newPos.z = quantizeValue * (int)(newPos.z / quantizeValue);
 
             var matrix = Matrix4x4.TRS(newPos + transform.position, Quaternion.identity, transform.localScale); // transform.localToWorldMatrix;
 
@@ -147,7 +149,7 @@ namespace WaterSystem
 
         private static void SafeDestroy(Object o)
         {
-            if(Application.isPlaying)
+            if (Application.isPlaying)
                 Destroy(o);
             else
                 DestroyImmediate(o);
@@ -170,11 +172,11 @@ namespace WaterSystem
             _planarReflections.m_settings = settingsData.planarSettings;
             _planarReflections.enabled = settingsData.refType == ReflectionType.PlanarReflection;
 
-            if(resources == null)
+            if (resources == null)
             {
                 resources = Resources.Load("WaterResources") as WaterResources;
             }
-            if(Application.platform != RuntimePlatform.WebGLPlayer) // TODO - bug with Opengl depth
+            if (Application.platform != RuntimePlatform.WebGLPlayer) // TODO - bug with Opengl depth
                 CaptureDepthMap();
         }
 
@@ -213,7 +215,7 @@ namespace WaterSystem
             Shader.SetGlobalFloat(MaxWaveHeight, _maxWaveHeight);
             Shader.SetGlobalFloat(MaxDepth, surfaceData._waterMaxVisibility);
 
-            switch(settingsData.refType)
+            switch (settingsData.refType)
             {
                 case ReflectionType.Cubemap:
                     Shader.EnableKeyword("_REFLECTION_CUBEMAP");
@@ -259,14 +261,14 @@ namespace WaterSystem
             for (var i = 0; i < _waves.Length; i++)
             {
                 waveData[i] = new Vector4(_waves[i].amplitude, _waves[i].direction, _waves[i].wavelength, _waves[i].onmiDir);
-                waveData[i+10] = new Vector4(_waves[i].origin.x, _waves[i].origin.y, 0, 0);
+                waveData[i + 10] = new Vector4(_waves[i].origin.x, _waves[i].origin.y, 0, 0);
             }
             return waveData;
         }
 
         private void SetupWaves(bool custom)
         {
-            if(!custom)
+            if (!custom)
             {
                 //create basic waves based off basic wave settings
                 var backupSeed = Random.state;
@@ -297,9 +299,87 @@ namespace WaterSystem
             }
         }
 
+        public void SmoothUpdateWaterSettings(float targetVisibility, Gradient targetAbsorption, Gradient targetScatter, float duration)
+        {
+            StartCoroutine(SmoothUpdateCoroutine(targetVisibility, targetAbsorption, targetScatter, duration));
+        }
+
+        private IEnumerator SmoothUpdateCoroutine(float targetVisibility, Gradient targetAbsorption, Gradient targetScatter, float duration)
+        {
+            float elapsed = 0f;
+            float startVisibility = surfaceData._waterMaxVisibility;
+
+            Gradient startAbsorption = surfaceData._absorptionRamp;
+            Gradient startScatter = surfaceData._scatterRamp;
+
+            // Buat copy dari start gradients
+            GradientColorKey[] startAbsKeys = startAbsorption.colorKeys;
+            GradientAlphaKey[] startAbsAlpha = startAbsorption.alphaKeys;
+
+            GradientColorKey[] startScatterKeys = startScatter.colorKeys;
+            GradientAlphaKey[] startScatterAlpha = startScatter.alphaKeys;
+
+            while (elapsed < duration)
+            {
+                float t = elapsed / duration;
+
+                // Interpolasi visibility
+                surfaceData._waterMaxVisibility = Mathf.Lerp(startVisibility, targetVisibility, t);
+
+                // Interpolasi setiap color key dan alpha key
+                Gradient newAbs = new Gradient();
+                Gradient newScatter = new Gradient();
+
+                GradientColorKey[] absColors = new GradientColorKey[startAbsKeys.Length];
+                GradientAlphaKey[] absAlphas = new GradientAlphaKey[startAbsAlpha.Length];
+
+                GradientColorKey[] scatterColors = new GradientColorKey[startScatterKeys.Length];
+                GradientAlphaKey[] scatterAlphas = new GradientAlphaKey[startScatterAlpha.Length];
+
+                for (int i = 0; i < startAbsKeys.Length; i++)
+                {
+                    absColors[i].color = Color.Lerp(startAbsKeys[i].color, targetAbsorption.colorKeys[i].color, t);
+                    absColors[i].time = startAbsKeys[i].time;
+                }
+                for (int i = 0; i < startAbsAlpha.Length; i++)
+                {
+                    absAlphas[i].alpha = Mathf.Lerp(startAbsAlpha[i].alpha, targetAbsorption.alphaKeys[i].alpha, t);
+                    absAlphas[i].time = startAbsAlpha[i].time;
+                }
+
+                for (int i = 0; i < startScatterKeys.Length; i++)
+                {
+                    scatterColors[i].color = Color.Lerp(startScatterKeys[i].color, targetScatter.colorKeys[i].color, t);
+                    scatterColors[i].time = startScatterKeys[i].time;
+                }
+                for (int i = 0; i < startScatterAlpha.Length; i++)
+                {
+                    scatterAlphas[i].alpha = Mathf.Lerp(startScatterAlpha[i].alpha, targetScatter.alphaKeys[i].alpha, t);
+                    scatterAlphas[i].time = startScatterAlpha[i].time;
+                }
+
+                newAbs.SetKeys(absColors, absAlphas);
+                newScatter.SetKeys(scatterColors, scatterAlphas);
+
+                surfaceData._absorptionRamp = newAbs;
+                surfaceData._scatterRamp = newScatter;
+
+                GenerateColorRamp(); // Apply perubahan ke shader
+
+                elapsed += Time.deltaTime;
+                yield return null;
+            }
+
+            // Set nilai akhir
+            surfaceData._waterMaxVisibility = targetVisibility;
+            surfaceData._absorptionRamp = targetAbsorption;
+            surfaceData._scatterRamp = targetScatter;
+
+            GenerateColorRamp();
+        }
         private void GenerateColorRamp()
         {
-            if(_rampTexture == null)
+            if (_rampTexture == null)
                 _rampTexture = new Texture2D(128, 4, GraphicsFormat.R8G8B8A8_SRGB, TextureCreationFlags.None);
             _rampTexture.wrapMode = TextureWrapMode.Clamp;
 
@@ -316,13 +396,13 @@ namespace WaterSystem
             }
             for (var i = 0; i < 128; i++)
             {
-                switch(surfaceData._foamSettings.foamType)
+                switch (surfaceData._foamSettings.foamType)
                 {
                     case 0: // default
-                        cols[i + 256] = defaultFoamRamp.GetPixelBilinear(i / 128f , 0.5f);
+                        cols[i + 256] = defaultFoamRamp.GetPixelBilinear(i / 128f, 0.5f);
                         break;
                     case 1: // simple
-                        cols[i + 256] = defaultFoamRamp.GetPixelBilinear(surfaceData._foamSettings.basicFoam.Evaluate(i / 128f) , 0.5f);
+                        cols[i + 256] = defaultFoamRamp.GetPixelBilinear(surfaceData._foamSettings.basicFoam.Evaluate(i / 128f), 0.5f);
                         break;
                     case 2: // custom
                         cols[i + 256] = Color.black;
@@ -342,10 +422,10 @@ namespace WaterSystem
         public void CaptureDepthMap()
         {
             //Generate the camera
-            if(_depthCam == null)
+            if (_depthCam == null)
             {
                 var go =
-                    new GameObject("depthCamera") {hideFlags = HideFlags.HideAndDontSave}; //create the cameraObject
+                    new GameObject("depthCamera") { hideFlags = HideFlags.HideAndDontSave }; //create the cameraObject
                 _depthCam = go.AddComponent<Camera>();
             }
 
@@ -362,7 +442,7 @@ namespace WaterSystem
             _depthCam.enabled = true;
             _depthCam.orthographic = true;
             _depthCam.orthographicSize = 250;//hardcoded = 1k area - TODO
-            _depthCam.nearClipPlane =0.01f;
+            _depthCam.nearClipPlane = 0.01f;
             _depthCam.farClipPlane = surfaceData._waterMaxVisibility + depthExtra;
             _depthCam.allowHDR = false;
             _depthCam.allowMSAA = false;
@@ -385,12 +465,12 @@ namespace WaterSystem
             //Vector4 zParams = new Vector4(1-f/n, f/n, (1-f/n)/f, (f/n)/f);//2015
             Shader.SetGlobalVector(DepthCamZParams, _params);
 
-/*            #if UNITY_EDITOR
-            Texture2D tex2D = new Texture2D(1024, 1024, TextureFormat.Alpha8, false);
-            Graphics.CopyTexture(_depthTex, tex2D);
-            byte[] image = tex2D.EncodeToPNG();
-            System.IO.File.WriteAllBytes(Application.dataPath + "/WaterDepth.png", image);
-            #endif*/
+            /*            #if UNITY_EDITOR
+                        Texture2D tex2D = new Texture2D(1024, 1024, TextureFormat.Alpha8, false);
+                        Graphics.CopyTexture(_depthTex, tex2D);
+                        byte[] image = tex2D.EncodeToPNG();
+                        System.IO.File.WriteAllBytes(Application.dataPath + "/WaterDepth.png", image);
+                        #endif*/
 
             _depthCam.enabled = false;
             _depthCam.targetTexture = null;
@@ -399,4 +479,5 @@ namespace WaterSystem
         [Serializable]
         public enum DebugMode { none, stationary, screen };
     }
+
 }
