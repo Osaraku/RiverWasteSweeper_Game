@@ -1,28 +1,46 @@
+using System.Collections.Generic;
 using UnityEngine;
 using WaterSystem;
-using WaterSystem.Data;
 
 public class WaterVisualChange : MonoBehaviour
 {
-    [SerializeField] Water water;
-    public Gradient newAbsorptionRamp;
-    public Gradient newScatterRamp;
-    public float newVisibility = 50f;
-    public float transitionDuration = 3f;
+    [SerializeField] private float transitionDuration = 5f;
+    private float startDuration = 3f;
+
+    [Header("StartingColor")]
+    [SerializeField] private float startVisibility = 50f;
+    [SerializeField] private Gradient startAbsorptionRamp;
+    [SerializeField] private Gradient startScatterRamp;
+
+    [SerializeField] private List<WaterColor> waterColor;
+
+    private void Start()
+    {
+        ApplyChanges(startVisibility, startAbsorptionRamp, startScatterRamp, startDuration);
+    }
 
     private void Update()
     {
         if (Player.Instance.GetTotalTrashValue() == 3)
         {
-            ApplyChanges();
+            ApplyChanges(waterColor[0].Visibility, waterColor[0].AbsorptionRamp, waterColor[0].ScatterRamp, transitionDuration);
         }
     }
 
-    public void ApplyChanges()
+    public void ApplyChanges(float newVisibility, Gradient newAbsorptionRamp, Gradient newScatterRamp, float transitionDuration)
     {
         if (Water.Instance != null)
         {
             Water.Instance.SmoothUpdateWaterSettings(newVisibility, newAbsorptionRamp, newScatterRamp, transitionDuration);
         }
     }
+}
+
+[System.Serializable]
+public class WaterColor
+{
+    public int trashValue;
+    public float Visibility;
+    public Gradient AbsorptionRamp;
+    public Gradient ScatterRamp;
 }

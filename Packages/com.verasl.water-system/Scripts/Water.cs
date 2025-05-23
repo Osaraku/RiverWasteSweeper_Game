@@ -325,6 +325,13 @@ namespace WaterSystem
 
                 // Interpolasi visibility
                 surfaceData._waterMaxVisibility = Mathf.Lerp(startVisibility, targetVisibility, t);
+                Shader.SetGlobalFloat(MaxDepth, Mathf.Lerp(startVisibility, targetVisibility, t));
+
+                _depthCam.farClipPlane = Mathf.Lerp(startVisibility, targetVisibility, t) + 4f; // 4f adalah depthExtra
+                var d = _depthCam.transform;
+                Vector4 _params = new Vector4(d.position.y, 250, 0, 0);
+                Shader.SetGlobalVector(DepthCamZParams, _params);
+
 
                 // Interpolasi setiap color key dan alpha key
                 Gradient newAbs = new Gradient();
