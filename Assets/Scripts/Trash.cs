@@ -4,7 +4,7 @@ using UnityEngine.Events;
 
 public class Trash : MonoBehaviour
 {
-    public event EventHandler OnTrashCollected;
+    public static event EventHandler OnTrashCollected;
 
     [SerializeField] String tagFilter;
     [SerializeField] int trashValue;

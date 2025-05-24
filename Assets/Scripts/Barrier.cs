@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Barrier : MonoBehaviour
 {
+    public static event EventHandler OnBarrierDestroyed;
+
     private enum State
     {
         Waiting,
@@ -33,6 +35,7 @@ public class Barrier : MonoBehaviour
                 if (Player.Instance.GetTotalTrashValue() >= trashValueRequired)
                 {
                     Player.Instance.SetForcedStop(true);
+                    OnBarrierDestroyed?.Invoke(this, EventArgs.Empty);
                     state = State.TransitionToBarrier;
                 }
                 break;

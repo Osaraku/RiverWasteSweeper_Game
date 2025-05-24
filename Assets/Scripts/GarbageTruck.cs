@@ -4,6 +4,8 @@ using UnityEngine.Events;
 
 public class GarbageTruck : MonoBehaviour
 {
+    public static event EventHandler OnTrashSold;
+
     [SerializeField] String tagFilter;
     [SerializeField] UnityEvent onTriggerEnter;
     [SerializeField] UnityEvent onTriggerExit;
@@ -24,5 +26,6 @@ public class GarbageTruck : MonoBehaviour
         int goldEarned = Player.Instance.GetCurrentTrashValue();
         Player.Instance.SetCurrentTrashValue(0);
         Player.Instance.IncreaseGoldAmount(goldEarned);
+        OnTrashSold?.Invoke(this, EventArgs.Empty);
     }
 }

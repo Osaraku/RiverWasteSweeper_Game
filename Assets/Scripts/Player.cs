@@ -18,6 +18,7 @@ public class Player : MonoBehaviour
     private int totalTrashValue;
     private int currentBoatLevel = 1;
     private int goldAmount = 0;
+    private bool isMoving;
 
     private void Awake()
     {
@@ -173,6 +174,13 @@ public class Player : MonoBehaviour
             float rotateSpeed = 2f;
             transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * rotateSpeed);
         }
+
+        isMoving = moveDir != Vector3.zero;
+    }
+
+    public bool GetIsMoving()
+    {
+        return isMoving;
     }
 
     public void SetForcedStop(bool value)

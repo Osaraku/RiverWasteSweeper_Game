@@ -1,16 +1,9 @@
 using UnityEngine;
 
-public class AudioClipRefsSO : MonoBehaviour
+[CreateAssetMenu()]
+public class AudioClipRefsSO : ScriptableObject
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public AudioClip[] trashCollected;
+    public AudioClip[] trashSold;
+    public AudioClip[] barrierDestroyed;
 }
