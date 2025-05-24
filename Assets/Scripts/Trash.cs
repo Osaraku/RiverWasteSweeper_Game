@@ -4,12 +4,13 @@ using UnityEngine.Events;
 
 public class Trash : MonoBehaviour
 {
+    public event EventHandler OnTrashCollected;
+
     [SerializeField] String tagFilter;
     [SerializeField] int trashValue;
     [SerializeField] UnityEvent onTriggerEnter;
-    [SerializeField] UnityEvent onTriggerExit;
 
-    void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if (!String.IsNullOrEmpty(tagFilter) && !other.gameObject.CompareTag(tagFilter)) return;
 
@@ -17,12 +18,9 @@ public class Trash : MonoBehaviour
         {
             onTriggerEnter.Invoke();
             Player.Instance.IncreaseTrashValue(trashValue);
+            OnTrashCollected?.Invoke(this, EventArgs.Empty);
+
             Destroy(gameObject);
         }
-    }
-
-    void OnTriggerExit(Collider other)
-    {
-        onTriggerExit.Invoke();
     }
 }
