@@ -14,11 +14,11 @@ public class Player : MonoBehaviour
     private InputAction interactAction;
 
     private bool forcedStop = false;
+    private bool isMoving;
     private int currentTrashValue = 0;
     private int totalTrashValue;
     private int currentBoatLevel = 1;
     private int goldAmount = 0;
-    private bool isMoving;
 
     private void Awake()
     {

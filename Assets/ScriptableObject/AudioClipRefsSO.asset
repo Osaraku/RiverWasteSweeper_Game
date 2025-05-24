@@ -12,4 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8d52f93616b3e64bb93a6c4895b9919, type: 3}
   m_Name: AudioClipRefsSO
   m_EditorClassIdentifier: 
-  trashCollected: []
+  trashCollected:
+  - {fileID: 8300000, guid: 6e8772b49f34d402a90016ed445d8a2f, type: 3}
+  trashSold:
+  - {fileID: 8300000, guid: 7bd6b897eb5ca4b7d88a205c4a51640c, type: 3}
+  barrierDestroyed:
+  - {fileID: 8300000, guid: 52320e590bf774734a288886eba557ba, type: 3}
