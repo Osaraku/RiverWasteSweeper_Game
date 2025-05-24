@@ -229,8 +229,12 @@ public class Player : MonoBehaviour
     public void IncreaseTrashValue(int value)
     {
         currentTrashValue += value;
-        totalTrashValue += value;
+        IncreaseTotalTrashValue(value);
         Debug.Log("Trash value:" + currentTrashValue);
+    }
+    public void IncreaseTotalTrashValue(int value)
+    {
+        totalTrashValue += value;
     }
 
     public void BoatUpgrade(int toLevel, int speedIncrease, int trashStorageIncrease)
