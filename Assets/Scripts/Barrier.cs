@@ -15,7 +15,7 @@ public class Barrier : MonoBehaviour
     }
 
     [SerializeField] private CinemachineCamera barrierCamera;
-    [SerializeField] private Transform barrierVisual;
+    [SerializeField] private Animator barrierVisual;
     [SerializeField] private int trashValueRequired;
     [SerializeField] private float transitionInTimer = 3f;
     [SerializeField] private float transitionOutTimer = 3f;
@@ -42,13 +42,13 @@ public class Barrier : MonoBehaviour
             case State.TransitionToBarrier:
                 barrierCamera.gameObject.SetActive(true);
                 transitionInTimer -= Time.deltaTime;
+                barrierVisual.SetBool("isDestroyed", true);
                 if (transitionInTimer < 0f)
                 {
                     state = State.BarrierDisappear;
                 }
                 break;
             case State.BarrierDisappear:
-                barrierVisual.gameObject.SetActive(false);
                 state = State.TransitionToPlayer;
                 break;
             case State.TransitionToPlayer:

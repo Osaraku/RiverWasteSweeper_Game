@@ -15,10 +15,11 @@ public class EngineSound : MonoBehaviour
     private void Update()
     {
         bool isMoving = Player.Instance.GetIsMoving();
+        bool isForcedStop = Player.Instance.GetForcedStop();
 
         // Target volume
-        float targetIdleVolume = isMoving ? 0f : 1f;
-        float targetMovingVolume = isMoving ? 1f : 0f;
+        float targetIdleVolume = isMoving && !isForcedStop ? 0f : 1f;
+        float targetMovingVolume = isMoving && !isForcedStop ? 1f : 0f;
 
         // Interpolasi volume secara halus
         idleAudio.volume = Mathf.Lerp(idleAudio.volume, targetIdleVolume, fadeSpeed * Time.deltaTime);

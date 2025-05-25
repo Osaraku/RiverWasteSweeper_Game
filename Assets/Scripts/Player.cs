@@ -183,6 +183,11 @@ public class Player : MonoBehaviour
         return isMoving;
     }
 
+    public bool GetForcedStop()
+    {
+        return forcedStop;
+    }
+
     public void SetForcedStop(bool value)
     {
         forcedStop = value;
