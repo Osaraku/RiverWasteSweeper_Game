@@ -12,9 +12,11 @@ public class Player : MonoBehaviour
 
     private InputSystem_Actions playerInputAction;
     private InputAction interactAction;
+    private InputAction pauseAction;
 
     private bool forcedStop = false;
     private bool isMoving;
+    private bool isGamePaused = false;
     private int currentTrashValue = 0;
     private int totalTrashValue;
     private int currentBoatLevel = 1;
@@ -27,9 +29,15 @@ public class Player : MonoBehaviour
         playerInputAction.Player.Enable();
     }
 
+    private void OnDestroy()
+    {
+        playerInputAction.Dispose();
+    }
+
     private void Start()
     {
         interactAction = InputSystem.actions.FindAction("Interact");
+        pauseAction = InputSystem.actions.FindAction("Pause");
     }
 
     // Update is called once per frame
@@ -37,6 +45,28 @@ public class Player : MonoBehaviour
     {
         HandleMovement();
         HandleInteractions();
+        TogglePauseGame();
+    }
+
+    public void TogglePauseGame()
+    {
+        if (pauseAction.WasPressedThisFrame())
+        {
+            isGamePaused = !isGamePaused;
+            if (isGamePaused)
+            {
+                Time.timeScale = 0f;
+            }
+            else
+            {
+                Time.timeScale = 1f;
+            }
+        }
+    }
+
+    public bool GetIsGamePaused()
+    {
+        return isGamePaused;
     }
 
     private void HandleInteractions()

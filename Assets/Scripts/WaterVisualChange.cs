@@ -11,10 +11,16 @@ public class WaterVisualChange : MonoBehaviour
     [SerializeField] private float startVisibility = 50f;
     [SerializeField] private Gradient startAbsorptionRamp;
     [SerializeField] private Gradient startScatterRamp;
+    [SerializeField] private Water water;
 
     [SerializeField] private List<WaterColor> waterColor;
 
     private int waterColorIndex = 0;
+
+    // private void Awake()
+    // {
+    //     water = GetComponent<Water>();
+    // }
 
     private void Start()
     {
@@ -27,6 +33,7 @@ public class WaterVisualChange : MonoBehaviour
 
         if (playerTotalTrashValue == waterColor[waterColorIndex].trashValue)
         {
+            Debug.Log("ChangeWater");
             ApplyChanges(waterColor[waterColorIndex].visibility, waterColor[waterColorIndex].absorptionRamp, waterColor[waterColorIndex].scatterRamp, transitionDuration);
 
             if (waterColorIndex + 1 < waterColor.Count)
@@ -38,9 +45,9 @@ public class WaterVisualChange : MonoBehaviour
 
     public void ApplyChanges(float newVisibility, Gradient newAbsorptionRamp, Gradient newScatterRamp, float transitionDuration)
     {
-        if (Water.Instance != null)
+        if (water != null)
         {
-            Water.Instance.SmoothUpdateWaterSettings(newVisibility, newAbsorptionRamp, newScatterRamp, transitionDuration);
+            water.SmoothUpdateWaterSettings(newVisibility, newAbsorptionRamp, newScatterRamp, transitionDuration);
         }
     }
 }
