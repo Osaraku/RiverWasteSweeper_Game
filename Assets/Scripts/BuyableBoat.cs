@@ -37,4 +37,9 @@ public class BuyableBoat : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    public int GetPrice()
+    {
+        return price;
+    }
 }

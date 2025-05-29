@@ -3696,6 +3696,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 11449807779109420, guid: f10ebed946a04b944b600b9bdd148aef, type: 3}
   m_PrefabInstance: {fileID: 45587545}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1137322479 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7322008981757213698, guid: 72ef0ac93fce368469593c2fbb6651ac, type: 3}
+  m_PrefabInstance: {fileID: 1335921445418668513}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1139843426
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4251,6 +4262,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f10ebed946a04b944b600b9bdd148aef, type: 3}
+--- !u!114 &1564496872 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 129853239510482525, guid: 72ef0ac93fce368469593c2fbb6651ac, type: 3}
+  m_PrefabInstance: {fileID: 1335921445418668513}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1571973527
 GameObject:
   m_ObjectHideFlags: 0
@@ -5534,6 +5556,43 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 11449807779109420, guid: f10ebed946a04b944b600b9bdd148aef, type: 3}
   m_PrefabInstance: {fileID: 668913059}
   m_PrefabAsset: {fileID: 0}
+--- !u!84 &2043308528
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: WaterDepthMap
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 1024
+  m_Height: 1024
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 94
+  m_ColorFormat: 0
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 0
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
 --- !u!1 &2046497024
 GameObject:
   m_ObjectHideFlags: 0
@@ -5598,43 +5657,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 11449807779109420, guid: f10ebed946a04b944b600b9bdd148aef, type: 3}
   m_PrefabInstance: {fileID: 1826390332}
   m_PrefabAsset: {fileID: 0}
---- !u!84 &2082628785
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: WaterDepthMap
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 1024
-  m_Height: 1024
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 94
-  m_ColorFormat: 0
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 0
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
 --- !u!1 &2131416877
 GameObject:
   m_ObjectHideFlags: 0
@@ -5799,6 +5821,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 129853239510482525, guid: 72ef0ac93fce368469593c2fbb6651ac, type: 3}
+      propertyPath: m_text
+      value: W
+      objectReference: {fileID: 0}
+    - target: {fileID: 1982287436737639205, guid: 72ef0ac93fce368469593c2fbb6651ac, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2573420301728355857, guid: 72ef0ac93fce368469593c2fbb6651ac, type: 3}
+      propertyPath: m_Name
+      value: ButtonBackground
+      objectReference: {fileID: 0}
     - target: {fileID: 3549550625207519276, guid: 72ef0ac93fce368469593c2fbb6651ac, type: 3}
       propertyPath: m_LocalPosition.x
       value: 60
@@ -5839,9 +5873,29 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3690253089678226509, guid: 72ef0ac93fce368469593c2fbb6651ac, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4870748350168748983, guid: 72ef0ac93fce368469593c2fbb6651ac, type: 3}
       propertyPath: m_Name
       value: BuyableBoat
+      objectReference: {fileID: 0}
+    - target: {fileID: 5508211609065794182, guid: 72ef0ac93fce368469593c2fbb6651ac, type: 3}
+      propertyPath: interactText
+      value: 
+      objectReference: {fileID: 1564496872}
+    - target: {fileID: 5508211609065794182, guid: 72ef0ac93fce368469593c2fbb6651ac, type: 3}
+      propertyPath: goldRequiredText
+      value: 
+      objectReference: {fileID: 1137322479}
+    - target: {fileID: 7322008981757213698, guid: 72ef0ac93fce368469593c2fbb6651ac, type: 3}
+      propertyPath: m_text
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7322008981757213698, guid: 72ef0ac93fce368469593c2fbb6651ac, type: 3}
+      propertyPath: m_HorizontalAlignment
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8052601622131962046, guid: 72ef0ac93fce368469593c2fbb6651ac, type: 3}
       propertyPath: 'colliders.Array.data[0]'

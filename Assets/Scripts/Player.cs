@@ -280,5 +280,10 @@ public class Player : MonoBehaviour
         maxTrashValue += trashStorageIncrease;
     }
 
+    public InputAction GetInteractAction()
+    {
+        return interactAction;
+    }
+
 
 }
