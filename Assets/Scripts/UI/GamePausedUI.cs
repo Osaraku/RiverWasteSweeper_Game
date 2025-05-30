@@ -26,7 +26,7 @@ public class GamePausedUI : MonoBehaviour
     }
     private void SettingsClick()
     {
-        throw new NotImplementedException();
+        OptionUI.Instance.Show();
     }
 
     private void Start()

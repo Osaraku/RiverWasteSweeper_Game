@@ -45,22 +45,22 @@ public class Player : MonoBehaviour
     {
         HandleMovement();
         HandleInteractions();
-        TogglePauseGame();
+        if (pauseAction.WasPressedThisFrame())
+        {
+            TogglePauseGame();
+        }
     }
 
     public void TogglePauseGame()
     {
-        if (pauseAction.WasPressedThisFrame())
+        isGamePaused = !isGamePaused;
+        if (isGamePaused)
         {
-            isGamePaused = !isGamePaused;
-            if (isGamePaused)
-            {
-                Time.timeScale = 0f;
-            }
-            else
-            {
-                Time.timeScale = 1f;
-            }
+            Time.timeScale = 0f;
+        }
+        else
+        {
+            Time.timeScale = 1f;
         }
     }
 

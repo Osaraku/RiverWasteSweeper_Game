@@ -10,6 +10,7 @@ public class SoundManager : MonoBehaviour
     public static SoundManager Instance { get; private set; }
 
     [SerializeField] private AudioClipRefsSO audioClipRefsSO;
+    [SerializeField] private AudioSource audioSource;
 
     private float volume = 1f;
 
@@ -29,27 +30,22 @@ public class SoundManager : MonoBehaviour
 
     private void Barrier_OnBarrierDestroyed(object sender, EventArgs e)
     {
-        PlaySound(audioClipRefsSO.barrierDestroyed, Player.Instance.transform.position);
+        PlaySound(audioClipRefsSO.barrierDestroyed);
     }
 
     private void GarbageTruck_OnTrashSold(object sender, EventArgs e)
     {
-        PlaySound(audioClipRefsSO.trashSold, Player.Instance.transform.position);
+        PlaySound(audioClipRefsSO.trashSold);
     }
 
     private void Trash_OnTrashCollected(object sender, EventArgs e)
     {
         Trash trash = sender as Trash;
-        PlaySound(audioClipRefsSO.trashCollected, trash.transform.position);
+        PlaySound(audioClipRefsSO.trashCollected);
     }
 
-    private void PlaySound(AudioClip[] audioClipArray, Vector3 position, float volume = 1f)
+    private void PlaySound(AudioClip audioClip, float volumeMultiplier = 1f)
     {
-        PlaySound(audioClipArray[UnityEngine.Random.Range(0, audioClipArray.Length)], position, volume);
-    }
-
-    private void PlaySound(AudioClip audioClip, Vector3 position, float volumeMultiplier = 1f)
-    {
-        AudioSource.PlayClipAtPoint(audioClip, position, volumeMultiplier * volume);
+        audioSource.PlayOneShot(audioClip, volumeMultiplier * volume);
     }
 }
