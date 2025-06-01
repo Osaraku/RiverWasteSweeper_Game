@@ -37,6 +37,7 @@ public class OptionUI : MonoBehaviour
     public void Hide()
     {
         optionVisual.gameObject.SetActive(false);
+        volumeSettingsUI.Hide();
     }
 
 }

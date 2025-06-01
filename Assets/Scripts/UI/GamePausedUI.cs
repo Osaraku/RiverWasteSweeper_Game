@@ -56,5 +56,6 @@ public class GamePausedUI : MonoBehaviour
     private void Hide()
     {
         pauseVisual.gameObject.SetActive(false);
+        OptionUI.Instance.Hide();
     }
 }

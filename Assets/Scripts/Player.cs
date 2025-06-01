@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,6 +10,7 @@ public class Player : MonoBehaviour
 
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private int maxTrashValue = 15;
+    [SerializeField] private List<GameObject> boatLevelList;
 
     private InputSystem_Actions playerInputAction;
     private InputAction interactAction;
@@ -274,8 +276,8 @@ public class Player : MonoBehaviour
 
     public void BoatUpgrade(int toLevel, int speedIncrease, int trashStorageIncrease)
     {
-        transform.GetChild(currentBoatLevel - 1).gameObject.SetActive(false);
-        transform.GetChild(toLevel - 1).gameObject.SetActive(true);
+        boatLevelList[currentBoatLevel - 1].gameObject.SetActive(false);
+        boatLevelList[toLevel - 1].gameObject.SetActive(true);
         moveSpeed += speedIncrease;
         maxTrashValue += trashStorageIncrease;
     }
