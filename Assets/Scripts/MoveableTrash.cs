@@ -6,12 +6,13 @@ public class MoveableTrash : MonoBehaviour
 {
     [SerializeField] String tagFilter;
     [SerializeField] int trashValue;
+    [SerializeField] Transform parentBasePosition;
     [SerializeField] Transform visual;
-    [SerializeField] CapsuleCollider capsuleCollider;
+    [SerializeField] CapsuleCollider triggerCollider;
 
     private void Update()
     {
-        capsuleCollider.center = visual.position;
+        triggerCollider.center = visual.position - parentBasePosition.position;
     }
 
     private void OnTriggerEnter(Collider other)
