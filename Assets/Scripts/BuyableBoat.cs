@@ -9,6 +9,7 @@ public class BuyableBoat : MonoBehaviour
     [SerializeField] int boatLevel;
     [SerializeField] int speedIncrease;
     [SerializeField] int trashStorageIncrease;
+    [SerializeField] GameObject interactArea;
     [SerializeField] UnityEvent onTriggerEnter;
     [SerializeField] UnityEvent onTriggerExit;
 
@@ -34,6 +35,7 @@ public class BuyableBoat : MonoBehaviour
             Player.Instance.SetGoldAmount(playerGold);
             Player.Instance.BoatUpgrade(boatLevel, speedIncrease, trashStorageIncrease);
 
+            Destroy(interactArea);
             Destroy(gameObject);
         }
     }
