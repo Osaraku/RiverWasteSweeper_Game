@@ -26,6 +26,12 @@ public class SoundManager : MonoBehaviour
         Trash.OnTrashCollected += Trash_OnTrashCollected;
         GarbageTruck.OnTrashSold += GarbageTruck_OnTrashSold;
         Barrier.OnBarrierDestroyed += Barrier_OnBarrierDestroyed;
+        MoveableTrash.OnTrashSold += MoveableTrash_OnTrashSold;
+    }
+
+    private void MoveableTrash_OnTrashSold(object sender, EventArgs e)
+    {
+        PlaySound(audioClipRefsSO.trashSold);
     }
 
     private void Barrier_OnBarrierDestroyed(object sender, EventArgs e)

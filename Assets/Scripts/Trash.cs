@@ -16,11 +16,11 @@ public class Trash : MonoBehaviour
 
         if (Player.Instance.GetCurrentTrashValue() < Player.Instance.GetMaxTrashValue())
         {
-            onTriggerEnter.Invoke();
             Player.Instance.IncreaseTrashValue(trashValue);
             OnTrashCollected?.Invoke(this, EventArgs.Empty);
 
-            Destroy(gameObject);
+            onTriggerEnter.Invoke();
+            // Destroy(gameObject);
         }
     }
 }

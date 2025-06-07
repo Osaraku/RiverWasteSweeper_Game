@@ -4,11 +4,14 @@ using UnityEngine.Events;
 
 public class MoveableTrash : MonoBehaviour
 {
+    public static event EventHandler OnTrashSold;
+
     [SerializeField] String tagFilter;
     [SerializeField] int trashValue;
     [SerializeField] Transform parentBasePosition;
     [SerializeField] Transform visual;
     [SerializeField] CapsuleCollider triggerCollider;
+    [SerializeField] UnityEvent onTriggerEnter;
 
     private void Update()
     {
@@ -21,7 +24,10 @@ public class MoveableTrash : MonoBehaviour
 
         Player.Instance.IncreaseTotalTrashValue(trashValue);
         Player.Instance.IncreaseGoldAmount(trashValue);
-        Destroy(gameObject);
+
+        OnTrashSold?.Invoke(this, EventArgs.Empty);
+        onTriggerEnter.Invoke();
+        // Destroy(gameObject);
     }
 
 }
