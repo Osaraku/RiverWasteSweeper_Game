@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class SoundManager : MonoBehaviour
 {
-    private const string PLAYER_PREFS_SFX_VOLUME = "SFXVolume";
-
     public static SoundManager Instance { get; private set; }
 
     [SerializeField] private AudioClipRefsSO audioClipRefsSO;
@@ -17,8 +15,6 @@ public class SoundManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-
-        volume = PlayerPrefs.GetFloat(PLAYER_PREFS_SFX_VOLUME, 1f);
     }
 
     private void Start()
@@ -27,6 +23,12 @@ public class SoundManager : MonoBehaviour
         GarbageTruck.OnTrashSold += GarbageTruck_OnTrashSold;
         Barrier.OnBarrierDestroyed += Barrier_OnBarrierDestroyed;
         MoveableTrash.OnTrashSold += MoveableTrash_OnTrashSold;
+        BuyableBoat.OnBoatPurchased += BuyableBoat_OnBoatPurchased;
+    }
+
+    private void BuyableBoat_OnBoatPurchased(object sender, EventArgs e)
+    {
+        PlaySound(audioClipRefsSO.boatPurchased);
     }
 
     private void MoveableTrash_OnTrashSold(object sender, EventArgs e)

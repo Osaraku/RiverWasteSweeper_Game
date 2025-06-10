@@ -115,6 +115,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: WoodenBoxTrash
       objectReference: {fileID: 0}
+    - target: {fileID: 4826046119515065708, guid: f68e0f07f1e99b541b26789acbd329af, type: 3}
+      propertyPath: m_Radius
+      value: 0.1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 4790590939961251917, guid: f68e0f07f1e99b541b26789acbd329af, type: 3}
     m_RemovedGameObjects: []

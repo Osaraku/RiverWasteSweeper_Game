@@ -4,10 +4,18 @@ using UnityEngine.Events;
 
 public class BuyableBoat : MonoBehaviour
 {
+    public static event EventHandler OnBoatPurchased;
+
+    public static void ResetStaticData()
+    {
+        OnBoatPurchased = null;
+    }
+
     [SerializeField] String tagFilter;
     [SerializeField] int price;
     [SerializeField] int boatLevel;
     [SerializeField] int speedIncrease;
+    [SerializeField] int rotationIncrease;
     [SerializeField] int trashStorageIncrease;
     [SerializeField] GameObject interactArea;
     [SerializeField] UnityEvent onTriggerEnter;
@@ -33,7 +41,8 @@ public class BuyableBoat : MonoBehaviour
             playerGold -= price;
 
             Player.Instance.SetGoldAmount(playerGold);
-            Player.Instance.BoatUpgrade(boatLevel, speedIncrease, trashStorageIncrease);
+            Player.Instance.BoatUpgrade(boatLevel, speedIncrease, rotationIncrease, trashStorageIncrease);
+            OnBoatPurchased?.Invoke(this, EventArgs.Empty);
 
             Destroy(interactArea);
             Destroy(gameObject);

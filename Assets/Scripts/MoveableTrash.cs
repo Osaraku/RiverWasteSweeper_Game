@@ -6,6 +6,12 @@ public class MoveableTrash : MonoBehaviour
 {
     public static event EventHandler OnTrashSold;
 
+    public static void ResetStaticData()
+    {
+        OnTrashSold = null;
+    }
+
+
     [SerializeField] String tagFilter;
     [SerializeField] int trashValue;
     [SerializeField] Transform parentBasePosition;

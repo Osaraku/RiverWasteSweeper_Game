@@ -9,11 +9,14 @@ public class Player : MonoBehaviour
 
 
     [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private float sprintSpeed = 2f;
+    [SerializeField] private float rotationSpeed = 50f;
     [SerializeField] private int maxTrashValue = 15;
     [SerializeField] private List<GameObject> boatLevelList;
 
     private InputSystem_Actions playerInputAction;
     private InputAction interactAction;
+    private InputAction sprintAction;
     private InputAction pauseAction;
 
     private bool forcedStop = false;
@@ -23,6 +26,7 @@ public class Player : MonoBehaviour
     private int totalTrashValue;
     private int currentBoatLevel = 1;
     private int goldAmount = 0;
+
 
     private void Awake()
     {
@@ -39,6 +43,7 @@ public class Player : MonoBehaviour
     private void Start()
     {
         interactAction = InputSystem.actions.FindAction("Interact");
+        sprintAction = InputSystem.actions.FindAction("Sprint");
         pauseAction = InputSystem.actions.FindAction("Pause");
     }
 
@@ -96,13 +101,25 @@ public class Player : MonoBehaviour
     {
         Vector2 inputVector = playerInputAction.Player.Move.ReadValue<Vector2>();
 
-        inputVector = inputVector.normalized;
+        float moveInput = inputVector.y; // Up/Down untuk maju mundur
+        float rotateInput = inputVector.x; // Left/Right untuk rotasi
 
-        Vector3 moveDir = new Vector3(inputVector.x, 0f, inputVector.y);
+        if (sprintAction.WasPressedThisFrame())
+        {
+            moveSpeed += sprintSpeed;
+            Debug.Log("Sprint");
+        }
+        else if (sprintAction.WasReleasedThisFrame())
+        {
+            moveSpeed -= sprintSpeed;
+        }
 
         float moveDistance = moveSpeed * Time.deltaTime;
         float playerRadius = 1f;
         float playerHeight = 2f;
+
+        // Hitung arah gerak berdasarkan rotasi pemain
+        Vector3 moveDir = transform.forward * moveInput;
 
         // Layer Mask untuk mengecualikan layer "Player"
         int layerMask = ~LayerMask.GetMask("Player");
@@ -128,86 +145,21 @@ public class Player : MonoBehaviour
             }
         }
 
-        if (!canMove)
-        {
-            // Cant move toward moveDir
-
-            // Attempt only X movement
-            Vector3 moveDirX = new Vector3(moveDir.x, 0, 0).normalized;
-
-            hits = Physics.CapsuleCastAll(
-                transform.position,
-                transform.position + Vector3.up * playerHeight,
-                playerRadius,
-                moveDirX,
-                moveDistance,
-                layerMask
-            );
-
-            canMove = moveDir.x != 0;
-            foreach (RaycastHit hit in hits)
-            {
-                if (!hit.collider.isTrigger)
-                {
-                    canMove = false;
-                    break;
-                }
-            }
-
-            if (canMove)
-            {
-                // Can move only on the X
-                moveDir = moveDirX;
-            }
-            else
-            {
-                // Cannot move only on the X
-
-                // Attempt only Z movement
-                Vector3 moveDirZ = new Vector3(0, 0, moveDir.z).normalized;
-                hits = Physics.CapsuleCastAll(
-                    transform.position,
-                    transform.position + Vector3.up * playerHeight,
-                    playerRadius,
-                    moveDirZ,
-                    moveDistance,
-                    layerMask
-                );
-
-                canMove = moveDir.z != 0;
-                foreach (RaycastHit hit in hits)
-                {
-                    if (!hit.collider.isTrigger)
-                    {
-                        canMove = false;
-                        break;
-                    }
-                }
-
-                if (canMove)
-                {
-                    // Can move only on the Z
-                    moveDir = moveDirZ;
-                }
-                else
-                {
-                    // Cannot move any direction
-                }
-            }
-        }
-
+        // Gerakkan pemain jika tidak ada tabrakan dan tidak dalam forced stop
         if (canMove && !forcedStop)
         {
-            transform.position += moveDir * moveDistance;
+            transform.position += moveDir.normalized * moveDistance;
         }
 
-        if (!forcedStop)
+        // Rotasi pemain berdasarkan input kiri/kanan (X axis)
+        if (!forcedStop && rotateInput != 0f)
         {
-            float rotateSpeed = 2f;
-            transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * rotateSpeed);
+            float rotationAmount = rotateInput * rotationSpeed * Time.deltaTime;
+            transform.Rotate(Vector3.up, rotationAmount);
         }
 
-        isMoving = moveDir != Vector3.zero;
+        // Status gerak untuk animasi atau logika lainnya
+        isMoving = Mathf.Abs(moveInput) > 0.01f;
     }
 
     public bool GetIsMoving()
@@ -274,11 +226,13 @@ public class Player : MonoBehaviour
         totalTrashValue += value;
     }
 
-    public void BoatUpgrade(int toLevel, int speedIncrease, int trashStorageIncrease)
+    public void BoatUpgrade(int toLevel, int speedIncrease, int rotationIncrease, int trashStorageIncrease)
     {
         boatLevelList[currentBoatLevel - 1].gameObject.SetActive(false);
         boatLevelList[toLevel - 1].gameObject.SetActive(true);
+        currentBoatLevel = toLevel;
         moveSpeed += speedIncrease;
+        rotationSpeed += rotationIncrease;
         maxTrashValue += trashStorageIncrease;
     }
 
@@ -289,3 +243,126 @@ public class Player : MonoBehaviour
 
 
 }
+
+
+
+
+// ========== Old Handle Movement ==============
+// private void HandleMovement()
+// {
+//     Vector2 inputVector = playerInputAction.Player.Move.ReadValue<Vector2>();
+
+//     inputVector = inputVector.normalized;
+
+//     Vector3 moveDir = new Vector3(inputVector.x, 0f, inputVector.y);
+
+//     float moveDistance = moveSpeed * Time.deltaTime;
+//     float playerRadius = 1f;
+//     float playerHeight = 2f;
+
+//     // Layer Mask untuk mengecualikan layer "Player"
+//     int layerMask = ~LayerMask.GetMask("Player");
+
+//     // Gunakan CapsuleCastAll untuk mendapatkan semua collider yang bersinggungan
+//     RaycastHit[] hits = Physics.CapsuleCastAll(
+//         transform.position,
+//         transform.position + Vector3.up * playerHeight,
+//         playerRadius,
+//         moveDir,
+//         moveDistance,
+//         layerMask
+//     );
+
+//     // Cek apakah ada collider yang bukan trigger
+//     bool canMove = true;
+//     foreach (RaycastHit hit in hits)
+//     {
+//         if (!hit.collider.isTrigger)
+//         {
+//             canMove = false;
+//             break;
+//         }
+//     }
+
+//     if (!canMove)
+//     {
+//         // Cant move toward moveDir
+
+//         // Attempt only X movement
+//         Vector3 moveDirX = new Vector3(moveDir.x, 0, 0).normalized;
+
+//         hits = Physics.CapsuleCastAll(
+//             transform.position,
+//             transform.position + Vector3.up * playerHeight,
+//             playerRadius,
+//             moveDirX,
+//             moveDistance,
+//             layerMask
+//         );
+
+//         canMove = moveDir.x != 0;
+//         foreach (RaycastHit hit in hits)
+//         {
+//             if (!hit.collider.isTrigger)
+//             {
+//                 canMove = false;
+//                 break;
+//             }
+//         }
+
+//         if (canMove)
+//         {
+//             // Can move only on the X
+//             moveDir = moveDirX;
+//         }
+//         else
+//         {
+//             // Cannot move only on the X
+
+//             // Attempt only Z movement
+//             Vector3 moveDirZ = new Vector3(0, 0, moveDir.z).normalized;
+//             hits = Physics.CapsuleCastAll(
+//                 transform.position,
+//                 transform.position + Vector3.up * playerHeight,
+//                 playerRadius,
+//                 moveDirZ,
+//                 moveDistance,
+//                 layerMask
+//             );
+
+//             canMove = moveDir.z != 0;
+//             foreach (RaycastHit hit in hits)
+//             {
+//                 if (!hit.collider.isTrigger)
+//                 {
+//                     canMove = false;
+//                     break;
+//                 }
+//             }
+
+//             if (canMove)
+//             {
+//                 // Can move only on the Z
+//                 moveDir = moveDirZ;
+//             }
+//             else
+//             {
+//                 // Cannot move any direction
+//             }
+//         }
+//     }
+
+//     if (canMove && !forcedStop)
+//     {
+//         transform.position += moveDir * moveDistance;
+//     }
+
+//     if (!forcedStop)
+//     {
+//         float rotateSpeed = 2f;
+//         transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * rotateSpeed);
+//     }
+
+//     isMoving = moveDir != Vector3.zero;
+// }
+

@@ -6,6 +6,11 @@ public class Trash : MonoBehaviour
 {
     public static event EventHandler OnTrashCollected;
 
+    public static void ResetStaticData()
+    {
+        OnTrashCollected = null;
+    }
+
     [SerializeField] String tagFilter;
     [SerializeField] int trashValue;
     [SerializeField] UnityEvent onTriggerEnter;

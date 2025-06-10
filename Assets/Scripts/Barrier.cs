@@ -6,6 +6,11 @@ public class Barrier : MonoBehaviour
 {
     public static event EventHandler OnBarrierDestroyed;
 
+    public static void ResetStaticData()
+    {
+        OnBarrierDestroyed = null;
+    }
+
     private enum State
     {
         Waiting,

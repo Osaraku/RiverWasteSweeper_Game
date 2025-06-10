@@ -9,6 +9,9 @@ public class OptionUI : MonoBehaviour
     [SerializeField] private GameObject optionVisual;
     [SerializeField] private Button closeButton;
     [SerializeField] private VolumeSettingsUI volumeSettingsUI;
+    [SerializeField] private ResolutionSettingsUI resolutionSettingsUI;
+
+    private Action onClosedButtonAction;
 
     private void Awake()
     {
@@ -21,6 +24,8 @@ public class OptionUI : MonoBehaviour
     {
         Hide();
         volumeSettingsUI.Hide();
+        resolutionSettingsUI.Hide();
+        onClosedButtonAction();
     }
 
     private void Start()
@@ -28,16 +33,20 @@ public class OptionUI : MonoBehaviour
         Hide();
     }
 
-    public void Show()
+    public void Show(Action onClosedButtonAction)
     {
+        this.onClosedButtonAction = onClosedButtonAction;
+
         optionVisual.gameObject.SetActive(true);
         volumeSettingsUI.Show();
+        resolutionSettingsUI.Show();
     }
 
     public void Hide()
     {
         optionVisual.gameObject.SetActive(false);
         volumeSettingsUI.Hide();
+        resolutionSettingsUI.Hide();
     }
 
 }

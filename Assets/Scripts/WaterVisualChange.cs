@@ -17,11 +17,6 @@ public class WaterVisualChange : MonoBehaviour
 
     private int waterColorIndex = 0;
 
-    // private void Awake()
-    // {
-    //     water = GetComponent<Water>();
-    // }
-
     private void Start()
     {
         ApplyChanges(startVisibility, startAbsorptionRamp, startScatterRamp, startDuration);
@@ -31,7 +26,7 @@ public class WaterVisualChange : MonoBehaviour
     {
         int playerTotalTrashValue = Player.Instance.GetTotalTrashValue();
 
-        if (playerTotalTrashValue == waterColor[waterColorIndex].trashValue)
+        if (playerTotalTrashValue >= waterColor[waterColorIndex].trashValue)
         {
             Debug.Log("ChangeWater");
             ApplyChanges(waterColor[waterColorIndex].visibility, waterColor[waterColorIndex].absorptionRamp, waterColor[waterColorIndex].scatterRamp, transitionDuration);

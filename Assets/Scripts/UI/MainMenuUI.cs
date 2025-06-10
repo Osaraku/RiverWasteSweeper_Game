@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 public class MainMenuUI : MonoBehaviour
 {
+    [SerializeField] private GameObject gameLogo;
     [SerializeField] private Button playButton;
     [SerializeField] private Button optionButton;
     [SerializeField] private Button quitButton;
@@ -24,12 +25,25 @@ public class MainMenuUI : MonoBehaviour
 
     private void OptionClick()
     {
-
+        OptionUI.Instance.Show(Show);
+        Hide();
     }
 
     private void QuitClick()
     {
         Application.Quit();
+    }
+
+    public void Show()
+    {
+        gameObject.SetActive(true);
+        gameLogo.SetActive(true);
+    }
+
+    public void Hide()
+    {
+        gameObject.SetActive(false);
+        gameLogo.SetActive(false);
     }
 
 

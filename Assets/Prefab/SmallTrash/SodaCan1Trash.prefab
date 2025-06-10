@@ -128,7 +128,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4265178173233139224, guid: 7ce630b84b251ff45ae6a162d427174d, type: 3}
       propertyPath: m_Name
-      value: SodaCanTrash
+      value: SodaCan1Trash
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

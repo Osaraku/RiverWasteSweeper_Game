@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 public class GamePausedUI : MonoBehaviour
 {
+    [SerializeField] private GameObject gameLogo;
     [SerializeField] private GameObject pauseVisual;
     [SerializeField] private Button resumeButton;
     [SerializeField] private Button mainMenuButton;
@@ -26,7 +27,7 @@ public class GamePausedUI : MonoBehaviour
     }
     private void SettingsClick()
     {
-        OptionUI.Instance.Show();
+        OptionUI.Instance.Show(Show);
     }
 
     private void Start()
@@ -56,6 +57,6 @@ public class GamePausedUI : MonoBehaviour
     private void Hide()
     {
         pauseVisual.gameObject.SetActive(false);
-        OptionUI.Instance.Hide();
+        // OptionUI.Instance.Hide();
     }
 }
