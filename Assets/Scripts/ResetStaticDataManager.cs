@@ -8,5 +8,7 @@ public class ResetStaticDataManager : MonoBehaviour
         Barrier.ResetStaticData();
         GarbageTruck.ResetStaticData();
         MoveableTrash.ResetStaticData();
+        BuyableBoat.ResetStaticData();
+        MoveableTrashTutorialTrigger.ResetStaticData();
     }
 }

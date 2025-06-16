@@ -25,8 +25,8 @@ public class MainMenuUI : MonoBehaviour
 
     private void OptionClick()
     {
-        OptionUI.Instance.Show(Show);
         Hide();
+        OptionUI.Instance.Show(Show);
     }
 
     private void QuitClick()

@@ -5,10 +5,12 @@ using UnityEngine.Events;
 public class Trash : MonoBehaviour
 {
     public static event EventHandler OnTrashCollected;
+    public static event EventHandler OnTrashNotCollected;
 
     public static void ResetStaticData()
     {
         OnTrashCollected = null;
+        OnTrashNotCollected = null;
     }
 
     [SerializeField] String tagFilter;
@@ -26,6 +28,10 @@ public class Trash : MonoBehaviour
 
             onTriggerEnter.Invoke();
             // Destroy(gameObject);
+        }
+        else
+        {
+            OnTrashNotCollected?.Invoke(this, EventArgs.Empty);
         }
     }
 }

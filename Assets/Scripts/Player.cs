@@ -7,6 +7,8 @@ public class Player : MonoBehaviour
 {
     public static Player Instance { get; private set; }
 
+    public event EventHandler OnGamePaused;
+    public event EventHandler OnGameUnpaused;
 
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float sprintSpeed = 2f;
@@ -64,16 +66,13 @@ public class Player : MonoBehaviour
         if (isGamePaused)
         {
             Time.timeScale = 0f;
+            OnGamePaused?.Invoke(this, EventArgs.Empty);
         }
         else
         {
             Time.timeScale = 1f;
+            OnGameUnpaused?.Invoke(this, EventArgs.Empty);
         }
-    }
-
-    public bool GetIsGamePaused()
-    {
-        return isGamePaused;
     }
 
     private void HandleInteractions()
@@ -232,6 +231,7 @@ public class Player : MonoBehaviour
         boatLevelList[toLevel - 1].gameObject.SetActive(true);
         currentBoatLevel = toLevel;
         moveSpeed += speedIncrease;
+        sprintSpeed += speedIncrease;
         rotationSpeed += rotationIncrease;
         maxTrashValue += trashStorageIncrease;
     }
